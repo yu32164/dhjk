@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的番茄鐘 🍅</title>
+    <style>
+        :root { --primary-color: #e74c3c; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        h1 { color: var(--primary-color); }
+        .timer-display {
+            font-size: 6rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+        .controls button {
+            font-size: 1.2rem;
+            padding: 10px 25px;
+            margin: 0 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        #start { background-color: #2ecc71; color: white; }
+        #pause { background-color: #f1c40f; color: white; }
+        #reset { background-color: #95a5a6; color: white; }
+        button:hover { opacity: 0.8; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🍅 專注時間</h1>
+    <div class="timer-display" id="timer">25:00</div>
+    <div class="controls">
+        <button id="start">開始</button>
+        <button id="pause">暫停</button>
+        <button id="reset">重設</button>
+    </div>
+</div>
+
+<script>
+    let timeLeft = 1500; // 25 分鐘 = 1500 秒
+    let timerId = null;
+
+    const timerDisplay = document.getElementById('timer');
+    const startBtn = document.getElementById('start');
+    const pauseBtn = document.getElementById('pause');
+    const resetBtn = document.getElementById('reset');
+
+    function updateDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        document.title = `(${timerDisplay.textContent}) 番茄鐘`;
+    }
+
+    startBtn.addEventListener('click', () => {
+        if (timerId !== null) return; // 防止重複點擊
+        timerId = setInterval(() => {
+            timeLeft--;
+            updateDisplay();
+            if (timeLeft === 0) {
+                clearInterval(timerId);
+                alert('時間到！休息一下吧 ☕');
+            }
+        }, 1000);
+    });
+
+    pauseBtn.addEventListener('click', () => {
+        clearInterval(timerId);
+        timerId = null;
+    });
+
+    resetBtn.addEventListener('click', () => {
+        clearInterval(timerId);
+        timerId = null;
+        timeLeft = 1500;
+        updateDisplay();
+    });
+</script>
+
+</body>
+</html>
