@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>萬用倒數計時器</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #2c3e50; color: white; }
+        .card { background: #34495e; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
+        input { width: 60px; padding: 10px; font-size: 1.2rem; border-radius: 5px; border: none; margin-bottom: 20px; text-align: center; }
+        .time-display { font-size: 5rem; font-family: monospace; margin: 20px 0; color: #f1c40f; }
+        button { padding: 10px 20px; font-size: 1rem; cursor: pointer; border: none; border-radius: 5px; margin: 5px; transition: 0.2s; }
+        #start { background: #27ae60; color: white; }
+        #reset { background: #e74c3c; color: white; }
+        button:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>⏰ 倒數計時器</h2>
+    <input type="number" id="minutesInput" value="5" min="1"> 分鐘
+    <div class="time-display" id="display">05:00</div>
+    <button id="start">開始計時</button>
+    <button id="reset">重設</button>
+</div>
+
+<script>
+    let timer;
+    let totalSeconds;
+    const display = document.getElementById('display');
+    const input = document.getElementById('minutesInput');
+
+    function updateDisplay(s) {
+        let mins = Math.floor(s / 60);
+        let secs = s % 60;
+        display.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    document.getElementById('start').onclick = function() {
+        clearInterval(timer);
+        totalSeconds = parseInt(input.value) * 60;
+        updateDisplay(totalSeconds);
+
+        timer = setInterval(() => {
+            totalSeconds--;
+            if (totalSeconds <= 0) {
+                clearInterval(timer);
+                alert("時間到囉！");
+                totalSeconds = 0;
+            }
+            updateDisplay(totalSeconds);
+        }, 1000);
+    };
+
+    document.getElementById('reset').onclick = function() {
+        clearInterval(timer);
+        updateDisplay(parseInt(input.value) * 60);
+    };
+</script>
+
+</body>
+</html>
